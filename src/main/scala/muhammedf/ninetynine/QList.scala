@@ -375,6 +375,13 @@ object QList {
     */
   def lsort[T](list: List[List[T]]):List[List[T]]=list.sortWith(_.size<_.size)
 
+  /**
+    * P28 (**) Sorting a list of lists according to length of sublists. (b)
+    *
+    * @param list
+    * @tparam T
+    * @return
+    */
   def lsortFreq[T](list: List[List[T]]):List[List[T]]={
     def freq(size: Int):Int=list.filter(_.size==size).size
     list.sortWith((a,b)=>freq(a.size)<freq(b.size))

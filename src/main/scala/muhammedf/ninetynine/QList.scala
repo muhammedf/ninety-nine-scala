@@ -110,7 +110,7 @@ object QList {
     * @tparam T
     * @return
     */
-  def encode[T](list: List[List[T]]): List[(Int, T)] = for (l <- list) yield (l.size, l.head)
+  def encode[T](list: List[T]): List[(Int, T)] = for (l <- pack(list)) yield (l.size, l.head)
 
   /**
     * P11 (*) Modified run-length encoding.

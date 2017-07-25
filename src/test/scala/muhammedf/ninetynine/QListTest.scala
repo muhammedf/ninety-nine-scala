@@ -77,7 +77,7 @@ class QListTest extends FunSuite{
   test("P10 (*) Run-length encoding of a list."){
     val list=List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)
     val expected=List((4,'a), (1,'b), (2,'c), (2,'a), (1,'d), (4,'e))
-    val result=QList.encode(QList.pack(list))
+    val result=QList.encode(list)
     assert(expected==result)
   }
 

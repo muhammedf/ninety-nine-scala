@@ -50,7 +50,7 @@ class RichieInt(val x:Int) {
     *
     * @return
     */
-  def primeFactorMultiplicity:List[(Int,Int)]=QList.encode(QList.pack(this.primeFactors)).map(_.swap)
+  def primeFactorMultiplicity:List[(Int,Int)]=QList.encode(this.primeFactors).map(_.swap)
 }
 
 object Arithmetic{

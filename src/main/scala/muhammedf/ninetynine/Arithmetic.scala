@@ -33,14 +33,10 @@ class RichieInt(val x:Int) {
     * @return
     */
   def primeFactors:List[Int]={
-    def nextPrime(current:Int):Int= current match {
-      case 2 => 3
-      case _ => if(new RichieInt(current+2).isPrime) current+2 else nextPrime(current+2)
-    }
     def factors(currentPrime:Int, currentNumber:Int):List[Int]=currentNumber%currentPrime==0 match {
       case true if currentNumber/currentPrime==1 => currentPrime :: Nil
       case true => currentPrime :: factors(currentPrime, currentNumber/currentPrime)
-      case false => factors(nextPrime(currentPrime), currentNumber)
+      case false => factors(Arithmetic.nextPrime(currentPrime), currentNumber)
     }
     factors(2, x)
   }
@@ -92,6 +88,26 @@ object Arithmetic {
     }
     printDuration("totient", durationOf(()=>num.totient))
     printDuration("totient improved", durationOf(()=>num.totientImproved))
+  }
+
+  def nextPrime(current:Int):Int= current match {
+    case 2 => 3
+    case _ if current%2==1 => if((current+2).isPrime) current+2 else nextPrime(current+2)
+    case _ => if((current+1).isPrime) current+1 else nextPrime(current+1)
+  }
+
+  /**
+    * P39 (*) A list of prime numbers.
+    *
+    * @param range
+    * @return
+    */
+  def listPrimesinRange(range: Range):List[Int]={
+    def collect(cur:Int):List[Int]={
+      if(cur>range.end) Nil
+      else cur::collect(nextPrime(cur))
+    }
+    collect(nextPrime(range.start-1))
   }
 
 }

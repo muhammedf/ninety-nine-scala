@@ -38,4 +38,11 @@ class ArithmeticTest extends FunSuite{
     assert(10.totientImproved==4)
   }
 
+  test("P39 (*) A list of prime numbers."){
+    val range=7 to 31
+    val result=Arithmetic.listPrimesinRange(range)
+    val expected=List(7, 11, 13, 17, 19, 23, 29, 31)
+    assert(expected==result)
+  }
+
 }

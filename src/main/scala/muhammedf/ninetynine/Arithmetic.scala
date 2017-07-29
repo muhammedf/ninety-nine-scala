@@ -51,10 +51,18 @@ class RichieInt(val x:Int) {
     * @return
     */
   def primeFactorMultiplicity:List[(Int,Int)]=QList.encode(this.primeFactors).map(_.swap)
+
+  /**
+    * P37 (**) Calculate Euler's totient function phi(m) (improved).
+    *
+    * @return
+    */
+  def totientImproved:Int=this.primeFactorMultiplicity.map((t:(Int,Int))=>(t._1-1)*Math.pow(t._1, t._2-1).toInt).product
+
 }
 
-object Arithmetic{
-  implicit def intToRichie(x:Int):RichieInt=new RichieInt(x)
+object Arithmetic {
+  implicit def intToRichie(x: Int): RichieInt = new RichieInt(x)
 
   /**
     * P32 (**) Determine the greatest common divisor of two positive integer numbers.
@@ -63,8 +71,27 @@ object Arithmetic{
     * @param num2
     * @return
     */
-  def gcd(num1:Int, num2:Int):Int={
-    if(num2==0) num1
-    else gcd(num2, num1%num2)
+  def gcd(num1: Int, num2: Int): Int = {
+    if (num2 == 0) num1
+    else gcd(num2, num1 % num2)
   }
+
+  /**
+    * P38 (*) Compare the two methods of calculating Euler's totient function.
+    *
+    * @param num
+    */
+  def testTotients(num: Int):Unit={
+    def durationOf(func:()=>Any):Long={
+      val cur=System.currentTimeMillis()
+      func()
+      System.currentTimeMillis()-cur
+    }
+    def printDuration(func:String, dur:Long):Unit={
+      println(func+": "+dur+" ms")
+    }
+    printDuration("totient", durationOf(()=>num.totient))
+    printDuration("totient improved", durationOf(()=>num.totientImproved))
+  }
+
 }

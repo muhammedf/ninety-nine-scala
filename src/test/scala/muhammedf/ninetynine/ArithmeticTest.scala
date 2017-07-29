@@ -33,4 +33,9 @@ class ArithmeticTest extends FunSuite{
   test("P36 (**) Determine the prime factors of a given positive integer (2)."){
     assert(315.primeFactorMultiplicity==List((3,2), (5,1), (7,1)))
   }
+
+  test("P37 (**) Calculate Euler's totient function phi(m) (improved)."){
+    assert(10.totientImproved==4)
+  }
+
 }

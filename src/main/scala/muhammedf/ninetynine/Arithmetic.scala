@@ -1,5 +1,7 @@
 package muhammedf.ninetynine
 
+import Arithmetic.intToRichie
+
 /**
   * Created by muhammedf on 23.07.2017.
   */
@@ -55,6 +57,20 @@ class RichieInt(val x:Int) {
     */
   def totientImproved:Int=this.primeFactorMultiplicity.map((t:(Int,Int))=>(t._1-1)*Math.pow(t._1, t._2-1).toInt).product
 
+  /**
+    * P40 (**) Goldbach's conjecture.
+    *
+    * @return
+    */
+  def goldbach:(Int, Int)={
+    def gold(cur:Int):Int={
+      if((x-cur).isPrime) cur
+      else gold(Arithmetic.nextPrime(cur))
+    }
+    assert(x%2==0 && x>2)
+    val op1=gold(2)
+    (op1, x-op1)
+  }
 }
 
 object Arithmetic {
@@ -108,6 +124,33 @@ object Arithmetic {
       else cur::collect(nextPrime(cur))
     }
     collect(nextPrime(range.start-1))
+  }
+
+  def printSum(op1:Int, op2:Int):Unit={
+    Console println op1+op2+" = "+op1+" + "+op2
+  }
+
+  /**
+    * P41 (**) A list of Goldbach compositions. (a)
+    *
+    * @param range
+    */
+  def printGoldbachList(range: Range):Unit={
+    range.filter(a=>a%2==0 && a>2).foreach{
+      x =>
+        val (op1, op2)=x.goldbach
+        printSum(op1, op2)
+    }
+  }
+
+  /**
+    * P41 (**) A list of Goldbach compositions. (b)
+    *
+    * @param range
+    * @param lowerLimit
+    */
+  def printGoldbachListLimited(range: Range, lowerLimit:Int):Unit={
+    range.filter(a=>a%2==0 && a>2).map(_.goldbach).filter((t:(Int,Int))=>t._1>lowerLimit && t._2>lowerLimit).foreach((t:(Int,Int))=>printSum(t._1,t._2))
   }
 
 }

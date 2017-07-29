@@ -45,4 +45,7 @@ class ArithmeticTest extends FunSuite{
     assert(expected==result)
   }
 
+  test("P40 (**) Goldbach's conjecture."){
+    assert(28.goldbach==(5,23))
+  }
 }

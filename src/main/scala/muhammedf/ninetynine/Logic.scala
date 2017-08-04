@@ -26,7 +26,8 @@ object Logic{
   def not(op:Boolean):Boolean=(!op)
 
   /**
-    * P46 (**) Truth tables for logical expressions. and (2)
+    * P46 (**) Truth tables for logical expressions.
+    * P47 (*) Truth tables for logical expressions (2).
     *
     * @param func
     */

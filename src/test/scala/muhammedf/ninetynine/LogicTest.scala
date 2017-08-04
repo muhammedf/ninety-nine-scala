@@ -32,7 +32,7 @@ class LogicTest extends FunSuite{
     assert(exec(xor)==xorresults, "xor operation")
     assert(exec(impl)==implresults, "impl operation")
     assert(exec(equ)==equresults, "equ operation")
-
+    assert(not(true)==false && not(false)==true, "not operation")
   }
 
 }

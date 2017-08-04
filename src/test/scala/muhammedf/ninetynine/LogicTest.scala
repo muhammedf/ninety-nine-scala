@@ -35,4 +35,10 @@ class LogicTest extends FunSuite{
     assert(not(true)==false && not(false)==true, "not operation")
   }
 
+  test("P49 (**) Gray code."){
+    assert(gray(1)==List("0","1"))
+    assert(gray(2)==List("00", "01", "11", "10"))
+    assert(gray(3)==List("000", "001", "011", "010", "110", "111", "101", "100"))
+  }
+
 }

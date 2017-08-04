@@ -37,4 +37,18 @@ object Logic{
     for(b1<-bools;b2<-bools) Console println b1.toString.padTo(10, ' ')+b2.toString.padTo(10, ' ')+func(b1,b2).toString
   }
 
+  /**
+    * P49 (**) Gray code.
+    *
+    * @param n
+    * @return
+    */
+  def gray(n: Int):List[String]={
+    grays(n)
+  }
+
+  private lazy val grays:Stream[List[String]] = List("") #:: grays.map(l=>{
+    l.map("0"+_):::l.reverse.map("1"+_)
+  })
+
 }

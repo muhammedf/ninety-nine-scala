@@ -51,4 +51,36 @@ object Logic{
     l.map("0"+_):::l.reverse.map("1"+_)
   })
 
+  /**
+    * P50 (***) Huffman code.
+    *
+    * @param freqs
+    * @return
+    */
+  def huffman(freqs: List[(String, Int)]):List[(String, String)]={
+
+    case class Node(val left: Option[Node] = None, val right: Option[Node] = None, val value: Option[String] = None)
+
+    /**
+      * Puts the node that have small freq to the left side.
+      * @param list
+      * @return
+      */
+    def produceTree(list: List[(Int, Node)]):Node=list match {
+      case t1 :: t2 :: Nil => Node(Some(t1._2), Some(t2._2))
+      case t1 :: t2 :: rem => produceTree(((t1._1+t2._1, Node(Some(t1._2), Some(t2._2)))::rem).sortWith(_._1<_._1))
+    }
+
+    def produceCodes(node: Node, curcode: String):List[(String, String)]=node match {
+      case Node(None, None, x) => (x.get, curcode) :: Nil
+      case Node(Some(x), Some(y), None) => produceCodes(x, curcode+"0") ::: produceCodes(y, curcode+"1")
+    }
+
+    val nodes=freqs.map(t=>(t._2, new Node(value = Some(t._1)))).sortWith(_._1<_._1)
+    val root=produceTree(nodes)
+    val codes=produceCodes(root, "")
+    val order=freqs.unzip._1
+    codes.sortWith((t1, t2)=>order.indexOf(t1._1)<order.indexOf(t2._1))
+  }
+
 }

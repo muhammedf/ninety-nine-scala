@@ -41,4 +41,11 @@ class LogicTest extends FunSuite{
     assert(gray(3)==List("000", "001", "011", "010", "110", "111", "101", "100"))
   }
 
+  test("P50 (***) Huffman code."){
+    val freqs=List(("a", 45), ("b", 13), ("c", 12), ("d", 16), ("e", 9), ("f", 5))
+    val expected=List(("a","0"), ("b","101"), ("c","100"), ("d","111"), ("e","1101"), ("f","1100"))
+    val result=huffman(freqs)
+    assert(expected==result)
+  }
+
 }

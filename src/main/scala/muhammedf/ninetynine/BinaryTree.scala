@@ -3,16 +3,21 @@ package muhammedf.ninetynine
 sealed abstract class Tree[+T]{
   def nodeCount:Int
   def isBalanced:Boolean
+  def isSymmetric:Boolean
+  def isMirrorOf[Y](tree: Tree[Y]):Boolean = Tree.binFromTree(this) == Tree.binFromTree(tree)
 }
 case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
   lazy val isBalanced:Boolean = Math.abs(left.nodeCount - right.nodeCount)<=1 && left.isBalanced && right.isBalanced
   lazy val nodeCount:Int = 1 + left.nodeCount + right.nodeCount
+  lazy val isSymmetric:Boolean = left.isMirrorOf(right)
+
 }
 case object End extends Tree[Nothing] {
   override def toString: String = "."
   def nodeCount: Int = 0
   def isBalanced:Boolean = true
+  def isSymmetric:Boolean = true
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)
@@ -48,6 +53,11 @@ object Tree {
     }
     if(!binn.forall(b => b=='1' || b=='0')) throw new IllegalArgumentException("Only 1 and 0 are allowed.")
     tfb()
+  }
+
+  def binFromTree[T](tree: Tree[T]):String=tree match {
+    case End => "0"
+    case Node(_, left, right) => "1" + binFromTree(left) + binFromTree(right)
   }
 
 }

@@ -50,8 +50,8 @@ object Tree {
       case '1' :: rem => binn = rem; Node(put, tfb(), tfb())
       case '0' :: rem => binn = rem; End
       case Nil => End
+      case _ => throw new IllegalArgumentException("Only 1 and 0 are allowed.")
     }
-    if(!binn.forall(b => b=='1' || b=='0')) throw new IllegalArgumentException("Only 1 and 0 are allowed.")
     tfb()
   }
 

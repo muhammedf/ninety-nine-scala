@@ -5,19 +5,32 @@ sealed abstract class Tree[+T]{
   def isBalanced:Boolean
   def isSymmetric:Boolean
   def isMirrorOf[Y](tree: Tree[Y]):Boolean = Tree.binFromTree(this) == Tree.binFromTree(tree)
+
+  /**
+    * P57 (**) Binary search trees (dictionaries).
+    *
+    * @param x
+    * @tparam U
+    * @return
+    */
+  def addValue[U >: T <% Ordered[U]](x: U):Tree[U]
 }
 case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
   lazy val isBalanced:Boolean = Math.abs(left.nodeCount - right.nodeCount)<=1 && left.isBalanced && right.isBalanced
   lazy val nodeCount:Int = 1 + left.nodeCount + right.nodeCount
   lazy val isSymmetric:Boolean = left.isMirrorOf(right)
-
+  def addValue[U >: T <% Ordered[U]](x: U):Tree[U] = {
+    if(x>=value) Node(value, left, right.addValue(x))
+    else Node(value, left.addValue(x), right)
+  }
 }
 case object End extends Tree[Nothing] {
   override def toString: String = "."
   def nodeCount: Int = 0
   def isBalanced:Boolean = true
   def isSymmetric:Boolean = true
+  def addValue[U >: Nothing <% Ordered[U]](x: U):Tree[U] = Node(x)
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)
@@ -58,6 +71,21 @@ object Tree {
   def binFromTree[T](tree: Tree[T]):String=tree match {
     case End => "0"
     case Node(_, left, right) => "1" + binFromTree(left) + binFromTree(right)
+  }
+
+  /**
+    * P57 (**) Binary search trees (dictionaries).
+    *
+    * @param list
+    * @tparam T
+    * @return
+    */
+  def fromList[T <% Ordered[T]](list: List[T]):Tree[T]={
+    def fl(liste:List[T], tree: Tree[T]):Tree[T]=liste match {
+      case last::Nil => tree.addValue(last)
+      case head::tail => fl(tail, tree.addValue(head))
+    }
+    fl(list, End)
   }
 
 }

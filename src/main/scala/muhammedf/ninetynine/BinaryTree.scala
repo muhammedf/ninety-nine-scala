@@ -3,6 +3,12 @@ package muhammedf.ninetynine
 sealed abstract class Tree[+T]{
   def nodeCount:Int
   def isBalanced:Boolean
+
+  /**
+    * P56 (**) Symmetric binary trees.
+    *
+    * @return
+    */
   def isSymmetric:Boolean
   def isMirrorOf[Y](tree: Tree[Y]):Boolean = Tree.binFromTree(this) == Tree.binFromTree(tree)
 

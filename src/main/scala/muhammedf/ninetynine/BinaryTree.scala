@@ -10,7 +10,7 @@ sealed abstract class Tree[+T]{
     * @return
     */
   def isSymmetric:Boolean
-  def isMirrorOf[Y](tree: Tree[Y]):Boolean = Tree.binFromTree(this) == Tree.binFromTree(tree)
+  def isMirrorOf[Y](tree: Tree[Y]):Boolean
 
   /**
     * P57 (**) Binary search trees (dictionaries).
@@ -30,6 +30,10 @@ case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     if(x>=value) Node(value, left, right.addValue(x))
     else Node(value, left.addValue(x), right)
   }
+  def isMirrorOf[Y](tree: Tree[Y]):Boolean = tree match {
+    case Node(_, tleft, tright) => left.isMirrorOf(tright) && right.isMirrorOf(tleft)
+    case End => false
+  }
 }
 case object End extends Tree[Nothing] {
   override def toString: String = "."
@@ -37,6 +41,7 @@ case object End extends Tree[Nothing] {
   def isBalanced:Boolean = true
   def isSymmetric:Boolean = true
   def addValue[U >: Nothing <% Ordered[U]](x: U):Tree[U] = Node(x)
+  def isMirrorOf[Y](tree: Tree[Y]):Boolean = tree == End
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)

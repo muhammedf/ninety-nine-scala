@@ -57,15 +57,18 @@ object Tree {
     * @tparam T
     * @return
     */
-  def cBalanced[T](nodeCount: Int, value: T):List[Tree[T]]={
-    if(nodeCount==0) End::Nil
-    else
-      ("1"*(nodeCount-1)+"0"*nodeCount)
-      .permutations
-      .map("1"+_+"0")
-      .map(treeFromBin(_, value))
-      .filter(_.nodeCount==nodeCount)
-      .filter(_.isBalanced).toList
+  def cBalanced[T](nodeCount: Int, value: T):List[Tree[T]] = nodeCount match {
+    case 0 => End::Nil
+    case 1 => Node(value)::Nil
+    case n if n%2 == 1 => {
+      val one = cBalanced((n-1)/2, value)
+      one.flatMap(l => one.map(r => Node(value, l, r)))
+    }
+    case n if n%2 == 0 => {
+      val one = cBalanced(n/2, value)
+      val two = cBalanced((n-2)/2, value)
+      one.flatMap(l => two.map(r => Node(value, l, r))) ::: one.flatMap(r => two.map(l => Node(value, l, r)))
+    }
   }
 
   def treeFromBin[T](bin:String, put:T):Tree[T]={

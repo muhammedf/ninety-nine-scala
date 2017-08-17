@@ -102,4 +102,16 @@ object Tree {
     fl(list, End)
   }
 
+  /**
+    * P58 (**) Generate-and-test paradigm.
+    *
+    * @param nodeCount
+    * @param value
+    * @tparam T
+    * @return
+    */
+  def symmetricBalancedTrees[T](nodeCount:Int, value:T):List[Tree[T]]={
+    Tree.cBalanced(nodeCount, value).filter(_.isSymmetric)
+  }
+
 }

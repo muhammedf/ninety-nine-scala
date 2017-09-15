@@ -114,4 +114,21 @@ object Tree {
     Tree.cBalanced(nodeCount, value).filter(_.isSymmetric)
   }
 
+  /**
+    * P59 (**) Construct height-balanced binary trees.
+    * @param height
+    * @param value
+    * @tparam T
+    * @return
+    */
+  def hbalTrees[T](height:Int, value:T):List[Tree[T]]=height match {
+    case 0 => End::Nil
+    case 1 => Node(value)::Nil
+    case n => {
+      val oneless = hbalTrees(n-1, value);
+      val twoless = hbalTrees(n-2, value);
+      oneless.flatMap(o => twoless.flatMap(t => Node(value, o, t)::Node(value, t, o)::Nil)):::oneless.flatMap(o1 => oneless.map(o2 => Node(value, o1, o2)))
+    }
+  }
+
 }

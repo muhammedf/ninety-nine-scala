@@ -33,7 +33,7 @@ sealed abstract class Tree[+T]{
     *
     * @return
     */
-  def leafList:List[Tree[T]]
+  def leafList:List[T]
 }
 case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
@@ -52,8 +52,8 @@ case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     case Node(_, End, End) => 1
     case _ => left.leafCount + right.leafCount
   }
-  def leafList:List[Tree[T]] = (left, right) match {
-    case (End, End) => this::Nil
+  def leafList:List[T] = (left, right) match {
+    case (End, End) => value::Nil
     case _ => left.leafList:::right.leafList
   }
 }
@@ -65,7 +65,7 @@ case object End extends Tree[Nothing] {
   def addValue[U >: Nothing <% Ordered[U]](x: U):Tree[U] = Node(x)
   def isMirrorOf[Y](tree: Tree[Y]):Boolean = tree == End
   def leafCount:Int = 0
-  def leafList:List[Tree[Nothing]] = Nil
+  def leafList:List[Nothing] = Nil
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)

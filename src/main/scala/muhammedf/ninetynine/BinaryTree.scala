@@ -131,4 +131,31 @@ object Tree {
     }
   }
 
+  def minHbalNodes(height:Int):Int = height match {
+    case 0 => 0
+    case 1 => 1
+    case _ => 1 + minHbalNodes(height-1) + minHbalNodes(height-2)
+  }
+
+  def maxHbalHeight(nodeCount:Int):Int = {
+    val minHeight = minHbalHeight(nodeCount)
+    if(minHbalNodes(minHeight+1)<=nodeCount) minHeight+1 else minHeight
+  }
+
+  def minHbalHeight(nodeCount:Int):Int = (Math.log(nodeCount+1)/Math.log(2)).ceil.toInt
+
+  def maxHbalNodes(height:Int):Int = Math.pow(2, height).toInt - 1
+
+  /**
+    *P60 (**) Construct height-balanced binary trees with a given number of nodes.
+    *
+    * @param nodeCount
+    * @param value
+    * @tparam T
+    * @return
+    */
+  def hbalTreesWithNodes[T](nodeCount:Int, value:T):List[Tree[T]] = {
+    (hbalTrees(minHbalHeight(nodeCount), value):::hbalTrees(maxHbalHeight(nodeCount), value))
+      .filter(_.nodeCount==nodeCount)
+  }
 }

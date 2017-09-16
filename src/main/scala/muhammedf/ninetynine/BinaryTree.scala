@@ -41,6 +41,14 @@ sealed abstract class Tree[+T]{
     * @return
     */
   def internalList:List[T]
+
+  /**
+    * P62B (*) Collect the nodes at a given level in a list.
+    *
+    * @param level
+    * @return
+    */
+  def atLevel(level:Int):List[T]
 }
 case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
@@ -67,6 +75,11 @@ case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     case (End, End) => Nil
     case _ => value::left.internalList:::right.internalList
   }
+
+  def atLevel(level: Int): List[T] = level match {
+    case 1 => value::Nil
+    case _ => left.atLevel(level-1):::right.atLevel(level-1)
+  }
 }
 case object End extends Tree[Nothing] {
   override def toString: String = "."
@@ -78,6 +91,7 @@ case object End extends Tree[Nothing] {
   def leafCount:Int = 0
   def leafList:List[Nothing] = Nil
   def internalList:List[Nothing] = Nil
+  def atLevel(level: Int): List[Nothing] = Nil
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)

@@ -34,6 +34,13 @@ sealed abstract class Tree[+T]{
     * @return
     */
   def leafList:List[T]
+
+  /**
+    * P62 (*) Collect the internal nodes of a binary tree in a list.
+    *
+    * @return
+    */
+  def internalList:List[T]
 }
 case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
@@ -56,6 +63,10 @@ case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     case (End, End) => value::Nil
     case _ => left.leafList:::right.leafList
   }
+  def internalList:List[T] = (left, right) match {
+    case (End, End) => Nil
+    case _ => value::left.internalList:::right.internalList
+  }
 }
 case object End extends Tree[Nothing] {
   override def toString: String = "."
@@ -66,6 +77,7 @@ case object End extends Tree[Nothing] {
   def isMirrorOf[Y](tree: Tree[Y]):Boolean = tree == End
   def leafCount:Int = 0
   def leafList:List[Nothing] = Nil
+  def internalList:List[Nothing] = Nil
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)

@@ -20,6 +20,13 @@ sealed abstract class Tree[+T]{
     * @return
     */
   def addValue[U >: T <% Ordered[U]](x: U):Tree[U]
+
+  /**
+    * P61 (*) Count the leaves of a binary tree.
+    *
+    * @return
+    */
+  def leafCount:Int
 }
 case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
@@ -34,6 +41,10 @@ case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     case Node(_, tleft, tright) => left.isMirrorOf(tright) && right.isMirrorOf(tleft)
     case End => false
   }
+  lazy val leafCount:Int = this match {
+    case Node(_, End, End) => 1
+    case _ => left.leafCount + right.leafCount
+  }
 }
 case object End extends Tree[Nothing] {
   override def toString: String = "."
@@ -42,6 +53,7 @@ case object End extends Tree[Nothing] {
   def isSymmetric:Boolean = true
   def addValue[U >: Nothing <% Ordered[U]](x: U):Tree[U] = Node(x)
   def isMirrorOf[Y](tree: Tree[Y]):Boolean = tree == End
+  def leafCount:Int = 0
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)

@@ -208,4 +208,48 @@ object Tree {
     (hbalTrees(minHbalHeight(nodeCount), value):::hbalTrees(maxHbalHeight(nodeCount), value))
       .filter(_.nodeCount==nodeCount)
   }
+
+  /**
+    *
+    * @param nodeCount
+    * @return the side of the last node (by complete binary tree)
+    *         1 => root
+    *         2 => left
+    *         3 => right
+    */
+  def lastNodeAtWhichSide(nodeCount:Int):Int = {
+    require(nodeCount>=0, "node count must be zero or greater than zero")
+    nodeCount match {
+      case n if n<4 => n
+      case n if n%2==0 => lastNodeAtWhichSide(n/2);
+      case n if n%2==1 => lastNodeAtWhichSide((n-1)/2)
+    }
+  }
+
+  /**
+    * P63 (**) Construct a complete binary tree.
+    *
+    * @param nodeCount
+    * @param value
+    * @tparam T
+    * @return
+    */
+  def completeBinaryTree[T](nodeCount:Int, value:T):Tree[T] = lastNodeAtWhichSide(nodeCount) match {
+    case 0 => End
+    case 1 => Node(value)
+    case 2 => {
+      val height = minHbalHeight(nodeCount)
+      val rightTreeHeight = height-2
+      val rightTreeNodeCount = maxHbalNodes(rightTreeHeight)
+      val leftTreeNodeCount = nodeCount - (rightTreeHeight + 1)
+      Node(value, completeBinaryTree(leftTreeNodeCount, value), completeBinaryTree(rightTreeNodeCount, value))
+    }
+    case 3 => {
+      val heiht = minHbalHeight(nodeCount)
+      val leftTreeHeight = heiht-1
+      val leftTreeNodeCount = maxHbalNodes(leftTreeHeight)
+      val rightTreeNodeCount = nodeCount - (leftTreeNodeCount + 1)
+      Node(value, completeBinaryTree(leftTreeNodeCount, value), completeBinaryTree(rightTreeNodeCount, value))
+    }
+  }
 }

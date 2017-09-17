@@ -49,8 +49,11 @@ sealed abstract class Tree[+T]{
     * @return
     */
   def atLevel(level:Int):List[T]
+
+  def layoutBinaryTree:Tree[T]
 }
-case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
+
+abstract class Nod[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T]{
   override def toString: String = s"T(${value.toString}  ${left.toString} ${right.toString})"
   lazy val isBalanced:Boolean = Math.abs(left.nodeCount - right.nodeCount)<=1 && left.isBalanced && right.isBalanced
   lazy val nodeCount:Int = 1 + left.nodeCount + right.nodeCount
@@ -80,7 +83,13 @@ case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     case 1 => value::Nil
     case _ => left.atLevel(level-1):::right.atLevel(level-1)
   }
+
+  def layoutBinaryTree: PositionedNode[T] = ???
+
 }
+
+case class Node[+T](value: T, left: Tree[T], right: Tree[T]) extends Nod[T](value, left, right)
+
 case object End extends Tree[Nothing] {
   override def toString: String = "."
   def nodeCount: Int = 0
@@ -92,9 +101,14 @@ case object End extends Tree[Nothing] {
   def leafList:List[Nothing] = Nil
   def internalList:List[Nothing] = Nil
   def atLevel(level: Int): List[Nothing] = Nil
+  def layoutBinaryTree = End
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)
+}
+
+case class PositionedNode[+T](val value: T, val left: Tree[T], val right: Tree[T], x: Int, y: Int) extends Nod[T](value, left, right) {
+  override def toString = "T[" + x.toString + "," + y.toString + "](" + value.toString + " " + left.toString + " " + right.toString + ")"
 }
 
 object Tree {

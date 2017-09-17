@@ -50,7 +50,14 @@ sealed abstract class Tree[+T]{
     */
   def atLevel(level:Int):List[T]
 
+  /**
+    * P64 (**) Layout a binary tree (1).
+    *
+    * @return
+    */
   def layoutBinaryTree:Tree[T]
+
+  def layoutBinaryTree(parentX:Int, parentY:Int, symbol: Symbol):Tree[T]
 }
 
 abstract class Nod[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T]{
@@ -84,7 +91,25 @@ abstract class Nod[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T]{
     case _ => left.atLevel(level-1):::right.atLevel(level-1)
   }
 
-  def layoutBinaryTree: PositionedNode[T] = ???
+  def layoutBinaryTree(parentX:Int, parentY:Int, symbol: Symbol):PositionedNode[T] = symbol match {
+    case 'leftie => {
+      val x = parentX - 1 - right.nodeCount
+      val y = parentY + 1
+      PositionedNode(value, left.layoutBinaryTree(x, y, 'leftie), right.layoutBinaryTree(x, y, 'rightie), x, y)
+    }
+    case 'rightie =>{
+      val x = parentX + 1 + left.nodeCount
+      val y = parentY + 1
+      PositionedNode(value, left.layoutBinaryTree(x, y, 'leftie), right.layoutBinaryTree(x, y, 'rightie), x, y)
+    }
+    case 'root => {
+      val x = left.nodeCount + 1
+      val y = 1
+      PositionedNode(value, left.layoutBinaryTree(x, y, 'leftie), right.layoutBinaryTree(x, y, 'rightie), x, y)
+    }
+  }
+
+  def layoutBinaryTree: Tree[T] = layoutBinaryTree(0, 0, 'root)
 
 }
 
@@ -102,6 +127,7 @@ case object End extends Tree[Nothing] {
   def internalList:List[Nothing] = Nil
   def atLevel(level: Int): List[Nothing] = Nil
   def layoutBinaryTree = End
+  def layoutBinaryTree(parentX: Int, parentY: Int, symbol: Symbol) = End
 }
 object Node {
   def apply[T](value: T):Node[T] = Node(value, End, End)
